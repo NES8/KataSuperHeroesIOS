@@ -77,7 +77,7 @@ class SuperHeroesViewControllerTests: AcceptanceTestCase {
     }
     
     func testShowsCorrectSuperHeroes() {
-        let superHeroes = givenThereAreSomeSuperHeroes(10, avengers: false)
+        let superHeroes = givenThereAreSomeSuperHeroes(10000, avengers: false)
 
         openSuperHeroesViewController()
         
