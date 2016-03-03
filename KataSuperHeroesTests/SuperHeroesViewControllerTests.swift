@@ -53,7 +53,7 @@ class SuperHeroesViewControllerTests: AcceptanceTestCase {
         presentViewController(rootViewController)
     }
     
-    private func testShowsNoEmptyCaseIfThereAreSuperHeroes() {
+    func testShowsNoEmptyCaseIfThereAreSuperHeroes() {
         let superHeroes = givenThereAreSomeSuperHeroes()
         
         openSuperHeroesViewController()
@@ -61,8 +61,32 @@ class SuperHeroesViewControllerTests: AcceptanceTestCase {
         let tableView = tester().waitForViewWithAccessibilityLabel("SuperHeroesTableView") as! UITableView
         
         expect(tableView.numberOfRowsInSection(0)).to(equal(superHeroes.count))
+    }
+    
+    func testShowsCorrectOneSuperHeroe() {
+        let superHeroes = givenThereAreSomeSuperHeroes(1, avengers: false)
+        let superHeroe = superHeroes[0] 
         
+        openSuperHeroesViewController()
         
+        let tableView = tester().waitForViewWithAccessibilityLabel("SuperHeroesTableView") as! UITableView
+        let cell = tableView.cellForRowAtIndexPath(NSIndexPath.init(forRow: 0, inSection: 0)) as! SuperHeroTableViewCell
         
+        expect(cell.nameLabel.text).to(equal(superHeroe.name))
+        expect(cell.avengersBadgeImageView.hidden).to(equal(!superHeroe.isAvenger))
+    }
+    
+    func testShowsCorrectSuperHeroes() {
+        let superHeroes = givenThereAreSomeSuperHeroes(2, avengers: false)
+
+        openSuperHeroesViewController()
+
+        let tableView = tester().waitForViewWithAccessibilityLabel("SuperHeroesTableView") as! UITableView
+
+        for i in 0..<superHeroes.count {
+            let cell = tableView.cellForRowAtIndexPath(NSIndexPath.init(forRow: i, inSection: 0)) as! SuperHeroTableViewCell
+            let superHeroe = superHeroes[i]
+            expect(cell.nameLabel.text).to(equal(superHeroe.name))
+        }
     }
 }
