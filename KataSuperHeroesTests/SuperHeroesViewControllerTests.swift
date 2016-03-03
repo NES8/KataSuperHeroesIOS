@@ -77,16 +77,28 @@ class SuperHeroesViewControllerTests: AcceptanceTestCase {
     }
     
     func testShowsCorrectSuperHeroes() {
-        let superHeroes = givenThereAreSomeSuperHeroes(2, avengers: false)
+        let superHeroes = givenThereAreSomeSuperHeroes(10, avengers: false)
 
         openSuperHeroesViewController()
-
-        let tableView = tester().waitForViewWithAccessibilityLabel("SuperHeroesTableView") as! UITableView
-
-        for i in 0..<superHeroes.count {
-            let cell = tableView.cellForRowAtIndexPath(NSIndexPath.init(forRow: i, inSection: 0)) as! SuperHeroTableViewCell
-            let superHeroe = superHeroes[i]
+        
+        for superHeroe in superHeroes {
+            let cell = tester().waitForViewWithAccessibilityLabel("\(superHeroe.name)") as! SuperHeroTableViewCell
             expect(cell.nameLabel.text).to(equal(superHeroe.name))
         }
     }
+    
+    func testSuperHeroeTappedGoesToCorrectDetail() {
+        let superHeroes = givenThereAreSomeSuperHeroes(10, avengers: false)
+        let i = 2
+        let superHeroe = superHeroes[i]
+        openSuperHeroesViewController()
+
+        tester().tapRowAtIndexPath(NSIndexPath.init(forRow: i, inSection: 0), inTableViewWithAccessibilityIdentifier: "SuperHeroesTableView")
+        
+        let item = tester().waitForViewWithAccessibilityLabel(superHeroe.name, traits: UIAccessibilityTraitHeader)
+        
+        expect(item).toNot(beNil())
+    }
+    
+
 }
