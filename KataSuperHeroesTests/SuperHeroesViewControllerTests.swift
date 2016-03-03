@@ -52,4 +52,17 @@ class SuperHeroesViewControllerTests: AcceptanceTestCase {
         rootViewController.viewControllers = [superHeroesViewController]
         presentViewController(rootViewController)
     }
+    
+    private func testShowsNoEmptyCaseIfThereAreSuperHeroes() {
+        let superHeroes = givenThereAreSomeSuperHeroes()
+        
+        openSuperHeroesViewController()
+        
+        let tableView = tester().waitForViewWithAccessibilityLabel("SuperHeroesTableView") as! UITableView
+        
+        expect(tableView.numberOfRowsInSection(0)).to(equal(superHeroes.count))
+        
+        
+        
+    }
 }
